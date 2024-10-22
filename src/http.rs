@@ -20,6 +20,7 @@ use spin_executor::bindings::wasi::io::streams::{self, StreamError};
 ///
 /// This should be used in favor of `IncomingRequest` and `OutgoingRequest` when there
 /// is no need for streaming bodies.
+#[derive(Clone)]
 pub struct Request {
     /// The method of the request
     method: Method,
@@ -88,6 +89,11 @@ impl Request {
     /// The request uri
     pub fn uri(&self) -> &str {
         &self.uri.1
+    }
+
+    /// Sets the request URI
+    pub fn set_uri(&mut self, uri: impl Into<String>) {
+        self.uri = Self::parse_uri(uri.into());
     }
 
     /// The request uri path
